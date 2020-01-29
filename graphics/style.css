@@ -1,0 +1,9 @@
+body {
+  background-color: teal;
+}
+
+#chart_div {
+  width: 1300px;
+  margin: 0 auto;
+}
+
