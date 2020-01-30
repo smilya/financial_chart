@@ -1,7 +1,7 @@
 // OPTIONS:
 //https://developers.google.com/chart/interactive/docs/gallery/linechart?hl=ru#configuration-options
 let options = {
-  width: 1100,
+  width: 1000,
   height: 500,
   backgroundColor: 'ivory',
   title: "My new chart!!",
@@ -10,7 +10,7 @@ let options = {
    chartArea: {
     backgroundColor: "white",
     left: 70,
-    right: 30,
+    right: 50,
   }, 
 
   hAxis: {

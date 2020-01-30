@@ -1,0 +1,115 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="style.css">
+  <title>Document</title>
+</head>
+<body>
+
+  <div class="inline-container">
+      <label for="yearsLong">Расчитать на срок (лет):</label><br>
+      <input type="text" id="yearsLong"><br>
+  </div>
+
+  <div class="inline-container">
+      <label for="spareFund">Свободные средства:</label><br>
+      <input type="text" id="spareFund">
+  </div>
+
+  <br>
+    
+  <fieldset id="salaryFieldset">
+  <legend>ЗарплатЫ</legend>
+    <div class="inline-container">
+      <label for="salaryName">Название:</label><br>
+      <input type="text" id="salaryName">
+    </div>
+    
+    <div class="inline-container">
+      <label for="salaryAmount">Сумма (в год):</label><br>
+      <input type="text" id="salaryAmount">
+    </div>
+    
+    <div class="inline-container">
+      <label for="salaryUpgrade">Индексация (% в год):</label><br>
+      <input type="text" id="salaryUpgrade">
+    </div>
+    
+    <div class="inline-container">
+      <label for="salaryInAction">Доступна в течение (лет):</label><br>
+      <input type="text" id="salaryInAction">
+    </div>
+
+    <div class="button" id="addSalary">Добавить</div>
+
+
+  </fieldset>
+  <br>
+
+  <fieldset id="depoFieldset">
+  <legend>Депозиты</legend>
+    <div class="inline-container">
+      <label for="depoName">Название:</label><br>
+      <input type="text" id="depoName">
+    </div>
+    
+    <div class="inline-container">
+      <label for="depoAmount">Cумма:</label><br>
+      <input type="text" id="depoAmount">
+    </div>
+    
+    <div class="inline-container">
+      <label for="interest">Годовой %:</label><br>
+      <input type="text" id="interest"><br>
+      <input type="checkbox" id="interestToSpareFund">
+      <label for="interestToSpareFund">Начисления выводятся</label>
+    </div>
+    
+    <div class="inline-container">
+      <label for="depoInAction">На срок (лет):</label><br>
+      <input type="text" id="depoInAction">
+    </div>
+    
+    <div class="inline-container mr-0">
+      <div class="button" id="addDeposit">Добавить</div>
+    </div>
+
+    
+
+  </fieldset>
+  <br>
+
+  <fieldset id="liabilityFieldset">
+  <legend>Расходы</legend>
+    <div class="inline-container">
+      <label for="liabilityName">Название:</label><br>
+      <input type="text" id="liabilityName">
+    </div>
+    
+    <div class="inline-container">
+      <label for="liabilityAmount">Cумма (в год):</label><br>
+      <input type="text" id="liabilityAmount">
+    </div>
+    
+    <div class="inline-container">
+      <label for="liabilityInAction">На срок (лет):</label><br>
+      <input type="text" id="liabilityInAction">
+    </div>
+
+    <div class="button" id="addLiability">Добавить</div>
+
+  </fieldset>
+  <br>
+  <div class="button" id="calculate">Расчитать</div>
+      
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <div id="chart_div"></div>
+
+  <script src="data.js"></script>
+  <script src="options.js"></script>
+  <script src="script.js"></script>  
+</body>
+</html>

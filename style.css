@@ -72,3 +72,9 @@ p {
   font-size: 14px;
   margin: 0;
 }
+
+#chart_div {
+  width: 1000px; /*Параметр придется согласовывать с options - там то же выставлено будет*/
+  /* margin: 0 auto; */
+  margin-top: 40px;
+}
