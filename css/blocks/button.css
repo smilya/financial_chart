@@ -1,0 +1,12 @@
+div.button {
+  padding: 5px 14px;
+  border: 1px solid black;
+  display: inline-block;
+  cursor: pointer;
+  background-color: cornsilk;
+}
+div.button:active {
+  transform: translate(1px, 1px);
+}
+
+/*# sourceMappingURL=button.css.map */

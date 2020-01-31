@@ -1,0 +1,16 @@
+{
+	"version": 3,
+	"file": "style.css",
+	"sources": [
+		"../scss/style.scss",
+		"../scss/vars.scss",
+		"../scss/blocks/main.scss"
+	],
+	"sourcesContent": [
+		"@import \"vars.scss\";\r\n@import \"blocks/main.scss\";\r\n\r\n\r\n",
+		"",
+		"@mixin block($color: black) {\r\n  border: 2px solid #{$color};\r\n  color: $color;\r\n  font-weight: bold;\r\n  padding: 20px;\r\n  display: inline-block;\r\n\r\n\r\n\r\n  &:hover {\r\n    background-color: yellow;\r\n  }\r\n\r\n\r\n}\r\n\r\n.level-1 {\r\n\r\n  &.boost {\r\n    background-color: lightcyan;\r\n  }\r\n  @include block();\r\n}"
+	],
+	"names": [],
+	"mappings": ";AEgBA,AAAA,QAAQ,CAAC;EAfP,MAAM,EAAE,GAAG,CAAC,KAAK,CAAC,KAAS;EAC3B,KAAK,EAFc,KAAK;EAGxB,WAAW,EAAE,IAAI;EACjB,OAAO,EAAE,IAAI;EACb,OAAO,EAAE,YAAY;CAiBtB;;;AAND,AAEE,QAFM,AAEL,MAAM,CAAC;EACN,gBAAgB,EAAE,SAAS;CAC5B;;;AAJH,AAPE,QAOM,AAPL,MAAM,CAAC;EACN,gBAAgB,EAAE,MAAM;CACzB"
+}

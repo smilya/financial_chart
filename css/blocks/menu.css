@@ -1,0 +1,26 @@
+.menu {
+  padding: 0;
+  text-align: center;
+  cursor: default;
+}
+.menu a {
+  margin: 0 5px;
+  display: inline-block;
+  cursor: default;
+  text-decoration: none;
+  color: inherit;
+}
+.menu a li {
+  display: inline;
+  padding: 5px 15px;
+}
+.menu a li:hover {
+  cursor: pointer;
+  background-color: lightsalmon;
+}
+.menu a li.active {
+  background-color: indianred;
+  cursor: default;
+}
+
+/*# sourceMappingURL=menu.css.map */

@@ -1,0 +1,22 @@
+{
+  "name": "financial_chart",
+  "version": "1.0.0",
+  "description": "Strategic financial chart construction",
+  "main": "script.js",
+  "scripts": {
+    "sass": "sass --watch scss/:css/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/smilya/financial_chart.git"
+  },
+  "author": "Ilya Smirnov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/smilya/financial_chart/issues"
+  },
+  "homepage": "https://github.com/smilya/financial_chart#readme",
+  "dependencies": {
+    "node-sass": "^4.13.1"
+  }
+}

@@ -1,0 +1,32 @@
+#inquiry {
+  background-color: $color-bgr;
+  display: inline-block;
+  width: $width-main;
+  padding-top: 10px;
+  padding-bottom: 30px;
+  padding-left: 20px;
+  font-size: 18px;
+
+  .inquiry-container {
+    margin-top: 10px;
+    display: flex;
+  }
+
+  label {
+    display: inline-block;
+    padding-right: 20px
+  }
+
+  input {
+    background-color: $color-bgr;
+    width: 300px;
+    border: none;
+    font-weight: bold;
+    font-size: 16px;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+}
