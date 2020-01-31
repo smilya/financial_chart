@@ -140,7 +140,7 @@ let chartDataMaker = function (arrOfObjs) {
 
 let initialDataObj;
 let yearsArr
-
+ 
 document.getElementById("calculate").onclick = function() {
   initialDataObj = makeDataObj(initialSalaries, initialDeposits, initialLiabilities);
   yearsArr = calculateYears(initialDataObj);
