@@ -130,11 +130,11 @@ class Data {
 
     answer.push([0, client.initialFund, null, null]);
 
-    for (let i = 1; i < this.maxLength; i++) {
+    for (let i = 1; i <= this.maxLength; i++) {
       let fundAmount = this.source[i-1].fund;
       let monthFund = [i, fundAmount, null, null];
       answer.push(monthFund);
-      if (fundAmount <= -100000) break;
+      if (fundAmount <= 0) break;
     }
     return answer;
   }
