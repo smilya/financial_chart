@@ -11,7 +11,7 @@ function drawBasic() {
 
   var data = new google.visualization.DataTable();
   data.addColumn('number', 'X');
-  data.addColumn('number', 'Data 1');
+  data.addColumn('number', 'Накопления');
   data.addColumn('number', 'Data 2');// добавляем новые графики,  
   data.addColumn('number', 'Data 3');// в подмассивах chartData должно быть столько же членов
    
@@ -30,10 +30,31 @@ let chartData = [
 
 // ========================================
 
+document.getElementById('start').onclick = function() {
+
 // 1. Получаем данные из анкеты 
 let input = new Input();
 
 // 2. Создаем объект клиента:
-let client = new Client(input.name, input.birthday, input.retiredAge, input.retiredPension, input.retiredCharge);
+let client = new Client(input);
 
-// СДЕЛАТЬ В Month ПРОЦЕДУРУ ВЫЧИСЛЕНИЯ retiredCharge
+// Cчитаем расклад по месяцам на период до возраста... ну пусть до 120 лет
+// на выходе имеем массив объектов months
+let period = 120 * 12 - client.age;
+let months = Month.makeMonthsArr(period, client);
+
+// Создаем объект с методами, извлекающими из нашего массива объектов months полезную инофрмацию для графика
+let data = new Data(months);
+
+// Формируем массив данных для передачи графику. 
+// сейчас функция data.getFunds останавливает вычисления, когда значение опускается ниже - 100 тыс.
+
+let funds = data.getFunds(client);
+
+// Полученный массив funds передаем графику и строим этот график.active
+  chartData = funds;
+  drawBasic();
+}
+
+
+
