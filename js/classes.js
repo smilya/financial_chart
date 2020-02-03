@@ -37,6 +37,8 @@ class Input {
     let fieldName = document.getElementById("inquiry-name");
     let fieldBirthday = document.getElementById("inquiry-birthday");
     let fieldretiredAge = document.getElementById("inquiry-retired");
+    let fieldretiredPension = document.getElementById("inquiry-income");
+    let fieldretiredCharge = document.getElementById("inquiry-payment");
 
     this.dataError = false;
 
@@ -62,15 +64,18 @@ class Input {
       this.dataError = true;
       fieldretiredAge.classList.add('error');
     }
-    
-  }
 
-  get retiredPension() {
-    return parseInt(document.getElementById("inquiry-income").value);
-  }
+    this.retiredPension = parseInt(fieldretiredPension.value); 
+    if (isNaN(this.retiredPension)) {
+      this.dataError = true;
+      fieldretiredPension.classList.add('error');
+    }
 
-  get retiredCharge() {
-    return parseInt(document.getElementById("inquiry-payment").value);
+    this.retiredCharge = parseInt(fieldretiredCharge.value); 
+    if (isNaN(this.retiredCharge)) {
+      this.dataError = true;
+      fieldretiredCharge.classList.add('error');
+    }  
   }
 
   // Временная заглушка. 
