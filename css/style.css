@@ -40,6 +40,9 @@ body {
 #inquiry input:focus {
   outline: none;
 }
+#inquiry input.error {
+  color: red;
+}
 
 div.button {
   padding: 5px 14px;

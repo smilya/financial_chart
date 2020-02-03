@@ -1,27 +1,88 @@
-// Класс для создания объекта с методами для считывание данных с форм на странице
-class Input {
-  get name() {
-    return document.getElementById("inquiry-name").value;
-  }
 
-  get birthday() {
-    return document.getElementById("inquiry-birthday").value;
-  }
+// объект с методами для отрисовки графиков
 
-  get retiredAge() {
-    return document.getElementById("inquiry-retired").value;
-  } 
+let graphics = {
+  // Массив данных для отрисовки трех графиков
+   chartData: [
+    [0, null, null, null], [1, null, null, null], [2, null, null, null], [3, null, null, null], [4, null, null, null], [5, null, null, null],
+    [6, null, null, null], [7, null, null, null], [8, null, null, null], [9, null, null, null], [10, null, null, null]
+  ],
+
+  drawBasic() {
+    var data = new google.visualization.DataTable();
+    data.addColumn('number', 'X');
+    data.addColumn('number', 'Накопления');
+    data.addColumn('number', 'Data 2');// добавляем новые графики,  
+    data.addColumn('number', 'Data 3');// в подмассивах chartData должно быть столько же членов
+     
+    data.addRows(graphics.chartData);
+    var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+    chart.draw(data, graph_options);
+  },
+
+  drawEmptyField() {
+    graphics.chartData = [
+      [0, null, null, null], [1, null, null, null], [2, null, null, null], [3, null, null, null], [4, null, null, null], [5, null, null, null],
+      [6, null, null, null], [7, null, null, null], [8, null, null, null], [9, null, null, null], [10, null, null, null]
+    ];
+  
+    graphics.drawBasic();
+  }
+  
+}
+
+// Класс для создания объекта с методами для считывания и приведения данных с форм на странице
+class Input {  
+  constructor() { 
+    let fieldName = document.getElementById("inquiry-name");
+    let fieldBirthday = document.getElementById("inquiry-birthday");
+    let fieldretiredAge = document.getElementById("inquiry-retired");
+
+    this.dataError = false;
+
+    this.name = fieldName.value.split(' ');
+    if (this.name[0] == undefined || this.name[0] == '' || this.name[1] == undefined || this.name[1] == '') {
+      this.dataError = true;
+      fieldName.classList.add('error');
+    }
+
+    this.birthdayArr = fieldBirthday.value.split('.');
+    if (this.birthdayArr[0] > 31 || this.birthdayArr[1] > 12 || this.birthdayArr[2].length != 4) {
+      this.dataError = true;
+      fieldBirthday.classList.add('error');
+    }
+
+    this.retiredAge = parseInt(fieldretiredAge.value) * 12;
+    let today = new Date();
+    let thisYear = today.getFullYear();
+    let thisMonth = today.getMonth() + 1;
+
+    let ageMonths = 12 - +this.birthdayArr[1] + 12 * (thisYear - +this.birthdayArr[2] - 1) + +thisMonth;
+    if (ageMonths >= this.retiredAge) {
+      this.dataError = true;
+      fieldretiredAge.classList.add('error');
+    }
+    
+  }
 
   get retiredPension() {
-    return document.getElementById("inquiry-income").value;
+    return parseInt(document.getElementById("inquiry-income").value);
   }
 
   get retiredCharge() {
-    return document.getElementById("inquiry-payment").value;
+    return parseInt(document.getElementById("inquiry-payment").value);
   }
 
+  // Временная заглушка. 
   get initialFund() {
     return 0;
+  }
+
+  static clearErrorFields() {
+    let fields = document.querySelectorAll(".inquiry-container>input");
+    for (let i of fields) {
+      i.classList.remove("error");
+    }
   }
   
 };
@@ -47,15 +108,15 @@ let assets = {
 class Client {
   constructor(input) {
     this.name = input.name;
-    this.birthdayStr = input.birthday; // строка в формате ДД.ММ.ГГГ
-    this.retiredAge = parseInt(input.retiredAge) * 12;
-    this.retiredPension = parseInt(input.retiredPension);
-    this.retiredCharge = assets.retiredChargeObj(parseInt(input.retiredCharge), this.retiredAge, this.age);
+    this.birthdayArr = input.birthdayArr; // строка в формате ДД.ММ.ГГГ
+    this.retiredAge = input.retiredAge;
+    this.retiredPension = input.retiredPension;
+    this.retiredCharge = assets.retiredChargeObj(input.retiredCharge, this.retiredAge, this.age);
     this._initialFund = input.initialFund;
   }
 
   get birthdayObj() {
-    let dayMonthYear = this.birthdayStr.split('.');
+    let dayMonthYear = this.birthdayArr;
     let date = dayMonthYear[0];
     let month = dayMonthYear[1] - 1;
     let year = dayMonthYear[2];
@@ -64,8 +125,11 @@ class Client {
 
   get age() {
     let today = new Date();
-    let ageNum = today - this.birthdayObj; // Возраст в миллисекундах
-    return Math.round(ageNum / (1000 * 60 * 60 * 24 * 30.45)); // Возраст в месяцах!!!!
+    // Вроде более точный способ посчитать возраст в месяцах
+    let ageMonths = 12 - +this.birthdayArr[1] + 12 * (today.getFullYear() - +this.birthdayArr[2] - 1) + +today.getMonth() + 1;
+    //let ageNum = today - this.birthdayObj; // Возраст в миллисекундах
+    //let ageMonths =  Math.round(ageNum / (1000 * 60 * 60 * 24 * 30.45)); // Возраст в месяцах    
+    return ageMonths;
   }
 
   get initialFund() {
@@ -132,9 +196,9 @@ class Data {
 
     for (let i = 1; i <= this.maxLength; i++) {
       let fundAmount = this.source[i-1].fund;
+      if (fundAmount < 0) break;
       let monthFund = [i, fundAmount, null, null];
       answer.push(monthFund);
-      if (fundAmount <= 0) break;
     }
     return answer;
   }
