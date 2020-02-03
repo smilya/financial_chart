@@ -40,7 +40,7 @@ body {
 #inquiry input:focus {
   outline: none;
 }
-#inquiry input.error {
+#inquiry .error {
   color: red;
 }
 

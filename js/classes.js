@@ -36,9 +36,9 @@ class Input {
   constructor() { 
     let fieldName = document.getElementById("inquiry-name");
     let fieldBirthday = document.getElementById("inquiry-birthday");
-    let fieldretiredAge = document.getElementById("inquiry-retired");
-    let fieldretiredPension = document.getElementById("inquiry-income");
-    let fieldretiredCharge = document.getElementById("inquiry-payment");
+    let fieldRetiredAge = document.getElementById("inquiry-retired");
+    let fieldRetiredPension = document.getElementById("inquiry-income");
+    let fieldRetiredCharge = document.getElementById("inquiry-payment");
 
     this.dataError = false;
 
@@ -46,35 +46,43 @@ class Input {
     if (this.name[0] == undefined || this.name[0] == '' || this.name[1] == undefined || this.name[1] == '') {
       this.dataError = true;
       fieldName.classList.add('error');
+      document.querySelector("label[for='inquiry-name']").classList.add("error");
     }
 
     this.birthdayArr = fieldBirthday.value.split('.');
-    if (this.birthdayArr[0] > 31 || this.birthdayArr[1] > 12 || this.birthdayArr[2].length != 4) {
+    if (isNaN(this.birthdayArr[0]) ||isNaN(this.birthdayArr[1]) || isNaN(this.birthdayArr[2]) || 
+    this.birthdayArr[0] <= 0 || this.birthdayArr[0] > 31 || 
+    this.birthdayArr[1] <= 0 || this.birthdayArr[1] > 12 || 
+    this.birthdayArr[2] <= 0 || this.birthdayArr[2].length != 4) {
       this.dataError = true;
       fieldBirthday.classList.add('error');
+      document.querySelector("label[for='inquiry-birthday']").classList.add("error");
     }
 
-    this.retiredAge = parseInt(fieldretiredAge.value) * 12;
+    this.retiredAge = parseInt(fieldRetiredAge.value) * 12;
     let today = new Date();
     let thisYear = today.getFullYear();
     let thisMonth = today.getMonth() + 1;
 
     let ageMonths = 12 - +this.birthdayArr[1] + 12 * (thisYear - +this.birthdayArr[2] - 1) + +thisMonth;
-    if (ageMonths >= this.retiredAge) {
+    if (isNaN(this.retiredAge) || ageMonths >= this.retiredAge) {
       this.dataError = true;
-      fieldretiredAge.classList.add('error');
+      fieldRetiredAge.classList.add('error');
+      document.querySelector("label[for='inquiry-retired']").classList.add("error");
     }
 
-    this.retiredPension = parseInt(fieldretiredPension.value); 
+    this.retiredPension = parseInt(fieldRetiredPension.value); 
     if (isNaN(this.retiredPension)) {
       this.dataError = true;
-      fieldretiredPension.classList.add('error');
+      fieldRetiredPension.classList.add('error');
+      document.querySelector("label[for='inquiry-income']").classList.add("error");
     }
 
-    this.retiredCharge = parseInt(fieldretiredCharge.value); 
+    this.retiredCharge = parseInt(fieldRetiredCharge.value); 
     if (isNaN(this.retiredCharge)) {
       this.dataError = true;
-      fieldretiredCharge.classList.add('error');
+      fieldRetiredCharge.classList.add('error');
+      document.querySelector("label[for='inquiry-payment']").classList.add("error");
     }  
   }
 
@@ -84,7 +92,7 @@ class Input {
   }
 
   static clearErrorFields() {
-    let fields = document.querySelectorAll(".inquiry-container>input");
+    let fields = document.querySelectorAll(".error");
     for (let i of fields) {
       i.classList.remove("error");
     }
