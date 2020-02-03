@@ -62,9 +62,9 @@ class Input {
     this.retiredAge = parseInt(fieldRetiredAge.value) * 12;
     let today = new Date();
     let thisYear = today.getFullYear();
-    let thisMonth = today.getMonth() + 1;
+    let thisMonth = today.getMonth(); // нумерация месяцев начинается с нуля!!!
 
-    let ageMonths = 12 - +this.birthdayArr[1] + 12 * (thisYear - +this.birthdayArr[2] - 1) + +thisMonth;
+    let ageMonths = 12 - +this.birthdayArr[1] + 12 * (thisYear - +this.birthdayArr[2] - 1) + +thisMonth + 2;
     if (isNaN(this.retiredAge) || ageMonths >= this.retiredAge) {
       this.dataError = true;
       fieldRetiredAge.classList.add('error');
@@ -139,7 +139,7 @@ class Client {
   get age() {
     let today = new Date();
     // Вроде более точный способ посчитать возраст в месяцах
-    let ageMonths = 12 - +this.birthdayArr[1] + 12 * (today.getFullYear() - +this.birthdayArr[2] - 1) + +today.getMonth() + 1;
+    let ageMonths = 12 - +this.birthdayArr[1] + 12 * (today.getFullYear() - +this.birthdayArr[2] - 1) + +today.getMonth() + 2;
     //let ageNum = today - this.birthdayObj; // Возраст в миллисекундах
     //let ageMonths =  Math.round(ageNum / (1000 * 60 * 60 * 24 * 30.45)); // Возраст в месяцах    
     return ageMonths;
