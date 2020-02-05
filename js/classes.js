@@ -57,6 +57,10 @@ class Input {
     let retiredPensionTakeEnd = document.getElementById('inquiry-incomeTakeEnd');
     let retiredChagrePayStart = document.getElementById('inquiry-paymentAtStart');
     let retiredChagrePayEnd = document.getElementById('inquiry-paymentAtEnd');
+    let fundIncreaseMonth = document.getElementById('inquiry-increaseMonth');
+    let fundIncreaseQuarter = document.getElementById('inquiry-increaseQuarter');
+    let fundIncreaseHalfYear = document.getElementById('inquiry-increaseHalfYear');
+    let fundIncreaseYear = document.getElementById('inquiry-increaseYear');
 
     this.dataError = false;
 
@@ -139,6 +143,11 @@ class Input {
       this.dataError = true;
       document.querySelector('.inquiry-retireFieldset').classList.add('error');
     }
+
+    if (fundIncreaseMonth.checked == true) { this.fundIncreaseRate = 'month'; }
+    if (fundIncreaseQuarter.checked == true) { this.fundIncreaseRate = 'quarter'; }
+    if (fundIncreaseHalfYear.checked == true) { this.fundIncreaseRate = 'halfYear'; }
+    if (fundIncreaseYear.checked == true) { this.fundIncreaseRate = 'year'; }
   }
 
   // Временная заглушка. 
@@ -318,6 +327,7 @@ class Client {
     this.assets = input.assets;
     this.workFundIncrease = input.workFundIncrease;
     this.retireFundIncrease = input.retireFundIncrease;
+    this.fundIncreaseRate = input.fundIncreaseRate;
   }
 
   get birthdayObj() {

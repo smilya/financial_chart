@@ -118,6 +118,12 @@ body {
   font-size: 16px;
   margin-top: 5px;
 }
+#inquiry fieldset.inquirey-increaseFieldset input {
+  top: 3px;
+}
+#inquiry fieldset.inquirey-increaseFieldset label {
+  margin-right: 10px;
+}
 #inquiry .error {
   color: red;
 }

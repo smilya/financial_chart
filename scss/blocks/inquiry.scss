@@ -78,6 +78,16 @@
       font-size: 16px;
       margin-top: 5px;
     }
+
+    &.inquirey-increaseFieldset {
+      input {
+        top: 3px;
+      }
+
+      label {
+        margin-right: 10px;
+      }
+    }
   }
 
 
