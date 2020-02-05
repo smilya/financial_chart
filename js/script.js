@@ -95,6 +95,7 @@ debugger */
   // Полученный массив funds передаем графику и строим этот график.active
     graphics.chartData = funds;
     graphics.drawBasic(); 
+
 }
 
 

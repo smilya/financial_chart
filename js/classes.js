@@ -401,7 +401,8 @@ class Month {
   static makeMonthsArr(period, client) {
     let monthsArr = [];
     let today = new Date()
-    let previousDateObj = new Date(today.getFullYear(), (today.getMonth() - 1));
+    // let previousDateObj = new Date(today.getFullYear(), (today.getMonth() - 1));
+    let previousDateObj = new Date(today.getFullYear(), today.getMonth());
     let firstMonth = new this(1, client.initialFund, previousDateObj, client); 
     monthsArr.push(firstMonth);
     
