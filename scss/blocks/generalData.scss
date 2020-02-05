@@ -1,0 +1,33 @@
+.generalData {
+  padding: 10px 0 5px 20px;
+  background-color: $color-bgr;
+  width: $width-main;
+  &>div {
+    margin-bottom: 10px;
+    display: inline-block;
+    margin-right: 20px;
+  }
+
+  h4 {
+    margin-bottom: 3px;
+    text-decoration: underline;
+  }
+
+  input {
+    border: none;
+    width: 100px;
+    background-color: $color-bgr;
+
+    &.bold {
+      font-weight: bold;
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  label {
+    margin-right: 5px;
+  }
+}

@@ -1,0 +1,67 @@
+.assets {
+  width: $width-main;
+  background-color: $color-bgr;
+  padding: 10px 20px 10px;
+
+  h2 {
+    margin-bottom: 5px;
+  }
+  
+  &>div {
+    display: flex;
+    justify-content: space-between;
+
+    &>div {
+    display: inline-block;
+
+      label {
+        display: inline-flex;
+        height: 40px;
+        align-items: center;
+        font-size: 16px;
+        margin-bottom: 5px;
+        }
+
+      input {
+        font-size: 14px;
+        font-weight: bold;
+        width: 140px;
+        background-color: cornsilk;
+        border: none;
+        margin-bottom: 5px;
+      
+        &#assets-title {
+          width: 220px;
+        }
+
+        &:focus {
+          outline: none;
+        }
+
+        &.error {
+          color: red;
+        }
+      }
+
+      .checkboxDiv {
+        input {
+          width: 15px;
+          position: relative;
+          top: 3px;
+        }
+
+        label {
+          font-size: 12px;
+        }
+      }
+    
+    }
+  }  
+
+  p {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding-top: 5px;
+  }
+  
+}

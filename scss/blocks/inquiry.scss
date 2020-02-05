@@ -8,18 +8,28 @@
   font-size: 18px;
 
   .inquiry-container {
-    margin-top: 10px;
+    margin-top: 20px;
     display: flex;
+  }
+
+  .inquiry-container--accessor {
+    padding-left: 50px;
+    margin-top: 5px;
   }
 
   label {
     display: inline-block;
-    padding-right: 20px
+    padding-right: 20px;
+
+    &.inquiry--compactLabel {
+      padding-right: 0;
+      padding-left: 5px;
+    }
   }
 
   input {
     background-color: $color-bgr;
-    width: 300px;
+    width: 130px;
     border: none;
     font-weight: bold;
     font-size: 16px;
@@ -27,7 +37,52 @@
     &:focus {
       outline: none;
     }
+
+    &#inquiry-name {
+      width: 300px;
+    }
+
+    &[type='radio'] {
+      width: 14px;
+      margin-left: 20px;
+      position: relative;
+      top: 4px;
+    }
+
   }
+
+  fieldset {
+    padding: 5px 25px 10px 10px;
+    margin-left: 30px;
+    margin-top: 5px;
+    display: inline-block;
+
+    legend {
+      font-size: 16px;
+    }
+
+    &>input[type='radio'] {
+      width: 16px;
+      margin-left: 10px; 
+      top: 1px;
+    }
+    
+    input {
+      width: 85px;
+      font-size: 16px;
+      background-color: cornsilk;
+    }
+
+    label {
+      padding-right: 0;
+      font-size: 16px;
+      margin-top: 5px;
+    }
+  }
+
+
+
+  
 
   .error {
     color: red;

@@ -10,7 +10,21 @@
 </head>
 
 <body>
-  <div id="chart_div"></div>
+
+  <div class="generalData mt-10">
+    <div>
+      <h4>Инфляция</h4>
+      <input id="generalData-inflationPeriod"><input type="text" id="generalData-inflationRate" class="bold">
+    </div>
+    <div>
+      <h4>Курсы валют</h4>
+      <input type="text" id="generalData-currencyPeriod">
+      <label for="generalData-USDrate">Доллар США:</label><input type="text" id="generalData-USDrate" class="bold">
+      <label for="generalData-EURrate">Евро:</label><input type="text" id="generalData-EURrate" class="bold">
+    </div>
+  </div>
+
+  <div id="chart_div" class="mt-10"></div>
 
   <div id="inquiry" class="mt-10">
     <div class="inquiry-container">
@@ -31,16 +45,99 @@
     <div class="inquiry-container">
       <label for="inquiry-income">Желаемый доход на пенсии:</label>
       <input id="inquiry-income" type="text">
-    </div>
+    </div>  
+    <div class="inquiry-container inquiry-container--accessor">
+      <span>Изымается:</span>
+      <input id="inquiry-incomeTakeStart" type="radio" name="income-Take" checked>
+      <label class="inquiry--compactLabel" for="inquiry-incomeTakeStart">В начале месяца</label>
+      <input id="inquiry-incomeTakeEnd" type="radio" name="income-Take">
+      <label class="inquiry--compactLabel" for="inquiry-incomeTakeEnd">В конце месяца</label>
+    </div>    
 
     <div class="inquiry-container">
       <label for="inquiry-payment">Средства, планируемые направлять на пенсию и<br> финансовые цели:</label>
       <input id="inquiry-payment" type="text">
     </div>
+    <div class="inquiry-container inquiry-container--accessor">
+      <span>Вносятся:</span>
+      <input id="inquiry-paymentAtStart" type="radio" name="payment-At">
+      <label class="inquiry--compactLabel" for="inquiry-paymentAtStart">В начале месяца</label>
+      <input id="inquiry-paymentAtEnd" type="radio" name="payment-At" checked>
+      <label class="inquiry--compactLabel" for="inquiry-paymentAtEnd">В конце месяца</label>
+    </div>  
 
-    <div id="start" class="button mt-10">Рассчитать</div>
+    <div class="inquiry-container">
+      <span>Темпы роста<br>пенсионных сбережений:</span>
+      <div class="inquiry-inline">
+        <fieldset class="inquiry-workFieldset">
+          <legend>Накопительный период</legend>
+          <input name="inquiry-fundWorkIncrease" id="inquiry-fundWorkIncrease-zero" type="radio">
+          <label for="inquiry-fundWorkIncrease-zero">Без роста</label><br>
+          <input name="inquiry-fundWorkIncrease" id="inquiry-fundWorkIncrease-inflation" type="radio" checked>
+          <label for="inquiry-fundWorkIncrease-inflation">На уровне инфляции</label><br>
+          <label class="ml-10" for="inquiry-fundWorkIncrease-given">На уровне:</label>
+          <input id="inquiry-fundWorkIncrease-given" type="text">          
+        </fieldset>
+
+        <fieldset class="inquiry-retireFieldset">
+          <legend>Пенсионный период</legend>
+          <input name="inquiry-fundRetireIncrease" id="inquiry-fundRetireIncrease-zero" type="radio">
+          <label for="inquiry-fundRetireIncrease-zero">Без роста</label><br>
+          <input name="inquiry-fundRetireIncrease" id="inquiry-fundRetireIncrease-inflation" type="radio" checked>
+          <label for="inquiry-fundRetireIncrease-inflation">На уровне инфляции</label><br>
+          <label class="ml-10" for="inquiry-fundRetireIncrease-given">На уровне:</label>
+          <input id="inquiry-fundRetireIncrease-given" type="text">          
+        </fieldset class="inquiry-workFieldset">
+
+      </div>
+    </div>
   </div>
 
+  <div class="assets mt-10">
+    <h2>Активы</h2>
+
+    <div>
+      <div>
+        <label for="assets-title"><span>Название</span></label><br>
+        <input class="fieldAssets" type="text" id="assets-title">
+      </div>
+  
+      <div>
+        <label for="assets-value">Сумма/стоимость<br>на сегодня</label><br>
+        <input class="fieldAssets" type="text" id="assets-value">
+      </div>
+  
+      <div>
+        <label for="assets-increase">Ставка<br>процента/удорожание</label><br>
+        <input class="fieldAssets" type="text" id="assets-increase"><br>
+        <div class="checkboxDiv">
+          <input type="radio" name="valueChange" id="assets-inflationIncrease">
+          <label for="assets-inflationIncrease">Удорожание темпами<br>инфляции</label>
+        </div>
+      </div>
+  
+      <div>
+        <label for="assets-decrease">Ставка<br>удешевления</label><br>
+        <input class="fieldAssets" type="text" id="assets-decrease">
+        <div class="checkboxDiv">
+          <input type="radio" name="valueChange" id="assets-inflationDecrease">
+          <label for="assets-inflationDecrease">Удешевление темпами<br>инфляции</label>
+        </div>
+      </div>
+  
+      <div>
+        <label for="assets-closure">Дата<br>закрытия/продажи</label><br>
+        <input class="fieldAssets" type="text" id="assets-closure">
+      </div>
+    </div>
+
+    <div id="assets-addAsset" class="button mb-10">Добавить актив</div>
+    
+  </div>
+
+  <div class="button-holder mt-10">
+    <div id="start" class="button button--large">Рассчитать</div>
+  </div>
 
   <script src="js/graph-options.js"></script>
   <script src="js/fill-form.js"></script>  

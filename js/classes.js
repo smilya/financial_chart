@@ -39,6 +39,24 @@ class Input {
     let fieldRetiredAge = document.getElementById("inquiry-retired");
     let fieldRetiredPension = document.getElementById("inquiry-income");
     let fieldRetiredCharge = document.getElementById("inquiry-payment");
+    let fieldInflation = document.getElementById('generalData-inflationRate');
+    let fieldUSDrate = document.getElementById('generalData-USDrate');
+    let fieldEURrate = document.getElementById('generalData-EURrate');
+    let fieldAssets_1 = document.getElementById('assets-title');
+    let fieldAssets_2 = document.getElementById('assets-value');
+    let fieldAssets_3 = document.getElementById('assets-increase');
+    let fieldAssets_4 = document.getElementById('assets-decrease');
+    let fieldAssets_5 = document.getElementById('assets-closure');
+    let workFundIncrease_zero = document.getElementById("inquiry-fundWorkIncrease-zero");
+    let workFundIncrease_inflation = document.getElementById("inquiry-fundWorkIncrease-inflation");
+    let workFundIncrease_given = document.getElementById("inquiry-fundWorkIncrease-given");
+    let retireFundIncrease_zero = document.getElementById("inquiry-fundRetireIncrease-zero");
+    let retireFundIncrease_inflation = document.getElementById("inquiry-fundRetireIncrease-inflation");
+    let retireFundIncrease_given = document.getElementById("inquiry-fundRetireIncrease-given");
+    let retiredPensionTakeStart = document.getElementById('inquiry-incomeTakeStart');
+    let retiredPensionTakeEnd = document.getElementById('inquiry-incomeTakeEnd');
+    let retiredChagrePayStart = document.getElementById('inquiry-paymentAtStart');
+    let retiredChagrePayEnd = document.getElementById('inquiry-paymentAtEnd');
 
     this.dataError = false;
 
@@ -78,12 +96,49 @@ class Input {
       document.querySelector("label[for='inquiry-income']").classList.add("error");
     }
 
+    if (retiredPensionTakeStart.checked) this.retiredPensionTaken = 'start';
+    if (retiredPensionTakeEnd.checked) this.retiredPensionTaken = 'end';
+
     this.retiredCharge = parseInt(fieldRetiredCharge.value); 
     if (isNaN(this.retiredCharge)) {
       this.dataError = true;
       fieldRetiredCharge.classList.add('error');
       document.querySelector("label[for='inquiry-payment']").classList.add("error");
-    }  
+    }
+
+    if (retiredChagrePayStart.checked) this.retiredChargePaid = 'start';
+    if (retiredChagrePayEnd.checked) this.retiredChargePaid = 'end';
+
+    this.inflation = parseFloat(fieldInflation.value);
+    this.USDrate = parseFloat(fieldUSDrate.value);
+    this.EURrate = parseFloat(fieldEURrate.value);
+
+    if (fieldAssets_1.value != 0 || fieldAssets_2.value != 0 || fieldAssets_3.value != 0 || fieldAssets_4.value != 0 || fieldAssets_5.value != 0) {
+      this.dataError = true;
+      let fields = document.querySelectorAll('.fieldAssets');
+      for (let i of fields) {
+        i.classList.add("error");
+      }  
+    }
+
+    this.assets = Input.newAssetsArr;
+    //Input.newAssetsArr = [];
+
+    if (workFundIncrease_zero.checked == true) {this.workFundIncrease = 0;}
+    else if (workFundIncrease_inflation.checked == true) {this.workFundIncrease = this.inflation;}
+    else this.workFundIncrease = parseFloat(workFundIncrease_given.value);
+    if (isNaN(this.workFundIncrease)) {
+      this.dataError = true;
+      document.querySelector('.inquiry-workFieldset').classList.add('error');
+    }
+
+    if (retireFundIncrease_zero.checked == true) {this.retireFundIncrease = 0;}
+    else if (retireFundIncrease_inflation.checked == true) {this.retireFundIncrease = this.inflation;}
+    else this.retireFundIncrease = parseFloat(retireFundIncrease_given.value);
+    if (isNaN(this.retireFundIncrease)) {
+      this.dataError = true;
+      document.querySelector('.inquiry-retireFieldset').classList.add('error');
+    }
   }
 
   // Временная заглушка. 
@@ -96,6 +151,76 @@ class Input {
     for (let i of fields) {
       i.classList.remove("error");
     }
+  }
+
+  static clearAssetsRadios() {
+    document.getElementById('assets-inflationIncrease').checked = false;
+    document.getElementById('assets-inflationDecrease').checked = false;
+  }
+  static clearValueChange() {
+    document.getElementById('assets-decrease').value = '';
+    document.getElementById('assets-increase').value = '';
+    document.getElementById('assets-decrease').classList.remove('error');
+    document.getElementById('assets-increase').classList.remove('error');
+  }
+  static ifDecreaseEntered() {
+    let fieldDecrease = document.getElementById('assets-decrease');
+    let fieldIncrease = document.getElementById('assets-increase');
+    if (fieldDecrease.value != 0) {
+      fieldIncrease.classList.add('error');
+      fieldDecrease.classList.add('error');
+    }
+    if (fieldIncrease.value == 0) {
+      fieldIncrease.classList.remove('error');
+      fieldDecrease.classList.remove('error');
+    }
+  }
+  static ifIncreaseEntered() {
+    let fieldDecrease = document.getElementById('assets-decrease');
+    let fieldIncrease = document.getElementById('assets-increase');
+    if (fieldIncrease.value != 0) {
+      fieldIncrease.classList.add('error');
+      fieldDecrease.classList.add('error');
+    }
+    if (fieldDecrease.value == 0) {
+      fieldIncrease.classList.remove('error');
+      fieldDecrease.classList.remove('error');
+    }
+  }
+
+  static newAssetsArr = [];
+
+  static listAssets(assetObjsArr) {
+    let paragraphs = document.querySelectorAll('.assets>p');
+    if(paragraphs[0] != undefined) {
+      for (let i of paragraphs) {
+        i.remove();
+      }
+    }
+    for (let assetObj of assetObjsArr) {
+      let str = `Актив: <b>${assetObj.title}</b>, Сумма/Стоимость: <b>${assetObj.value}</b>, Ставка: <b>${assetObj.valueChange}%</b>, Дата закрытия: <b>${assetObj.closureDateArr[0]}.${assetObj.closureDateArr[1]}</b><br>`;
+      let paragraph = document.createElement('p');
+      paragraph.innerHTML = str;
+      document.querySelector('#assets-addAsset').after(paragraph);
+    }
+  }
+
+  static clearFundIncreaseRadiosWork() {
+    document.getElementById("inquiry-fundWorkIncrease-zero").checked = false;
+    document.getElementById("inquiry-fundWorkIncrease-inflation").checked = false;
+  }
+
+  static clearFundIncreaseRadiosRetire() {
+    document.getElementById("inquiry-fundRetireIncrease-zero").checked = false;
+    document.getElementById("inquiry-fundRetireIncrease-inflation").checked = false;
+  }
+
+  static clearFundWorkIncreaseGiven() {
+    document.getElementById("inquiry-fundWorkIncrease-given").value = '';
+  }
+
+  static clearFundRetireIncreaseGiven() {
+    document.getElementById("inquiry-fundRetireIncrease-given").value = '';
   }
   
 };
@@ -115,6 +240,67 @@ let assets = {
 
     return answer;
   },
+
+  addAsset() {
+    let titleField = document.getElementById('assets-title');
+    let valueField = document.getElementById('assets-value');
+    let increaseField = document.getElementById('assets-increase');
+    let decreaseField = document.getElementById('assets-decrease');
+    let increaseInflation = document.getElementById("assets-inflationIncrease");
+    let decreaseInflation = document.getElementById("assets-inflationDecrease");
+    let closureDateField = document.getElementById('assets-closure');
+    let inflationRateField = document.getElementById('generalData-inflationRate');
+
+    valueField.classList.remove('error');
+    increaseField.classList.remove('error');
+    decreaseField.classList.remove('error');
+    closureDateField.classList.remove('error');
+
+    if(increaseField.value != 0 && decreaseField.value != 0) return false;
+    if (titleField.value == 0) return false;
+    if (!parseInt(valueField.value)) { 
+      valueField.classList.add('error');
+      return false;
+    }
+
+    let answer = {};
+    answer.title = titleField.value;
+    answer.value = parseInt(valueField.value);
+    
+    if (increaseField.value != 0) answer.valueChange = parseFloat(increaseField.value);
+    if (decreaseField.value != 0) answer.valueChange = parseFloat(decreaseField.value) * (-1);
+    if (increaseInflation.checked == true) answer.valueChange = parseFloat(inflationRateField.value);
+    if (decreaseInflation.checked == true) answer.valueChange = parseFloat(inflationRateField.value) * (-1);
+    if (isNaN(answer.valueChange)) {
+      increaseField.classList.add('error');
+      decreaseField.classList.add('error');
+      return false;
+    }
+
+    let closureDate = closureDateField.value.split('.');
+    if (closureDate[2] != undefined) {
+      closureDate.shift();
+    }
+    closureDate[0] = +closureDate[0];
+    closureDate[1] = +closureDate[1]; 
+    if (isNaN(closureDate[0]) || closureDate[0] > 12 || closureDate[0] <= 0 || isNaN(closureDate[1]) || closureDate[1] < new Date().getFullYear()) {
+      closureDateField.classList.add('error');
+      return false;
+    }
+    answer.closureDateArr = closureDate; 
+
+    Input.newAssetsArr.push(answer);
+
+    titleField.value = '';
+    valueField.value = '';
+    increaseField.value = '';
+    decreaseField.value = '';
+    increaseInflation.checked = false;
+    decreaseInflation.checked = false;
+    closureDateField.value = '';
+
+    return answer;
+  },
 }
 
 // Класс для создания объектов клиентов
@@ -126,6 +312,11 @@ class Client {
     this.retiredPension = input.retiredPension;
     this.retiredCharge = assets.retiredChargeObj(input.retiredCharge, this.retiredAge, this.age);
     this._initialFund = input.initialFund;
+    this.assets = input.assets;
+    this.workFundIncrease = input.workFundIncrease;
+    this.retireFundIncrease = input.retireFundIncrease;
+    this.retiredChargePaid = input.retiredChargePaid;
+    this.retiredPensionTaken = input.retiredPensionTaken;
   }
 
   get birthdayObj() {

@@ -11,6 +11,54 @@ google.charts.setOnLoadCallback(graphics.drawBasic);
 
 // ========================================
 
+// 0. Устанавливаем логику поведения для полей ввода и кнопок
+{ document.getElementById('assets-increase').onfocus = function() {
+    Input.clearAssetsRadios();
+  }
+  document.getElementById('assets-increase').oninput = function() {
+    Input.ifDecreaseEntered();
+  }
+  document.getElementById('assets-decrease').onfocus = function() {
+    Input.clearAssetsRadios();
+  }
+  document.getElementById('assets-decrease').oninput = function() {
+    Input.ifIncreaseEntered();
+  }
+  document.getElementById('assets-inflationIncrease').onfocus = function() {
+    Input.clearValueChange();
+  }
+  document.getElementById('assets-inflationDecrease').onfocus = function() {
+    Input.clearValueChange();
+  }
+
+  document.getElementById('assets-addAsset').onclick = function() {
+    if (!assets.addAsset()) return;
+    Input.listAssets(Input.newAssetsArr);
+  };
+
+  document.getElementById("inquiry-fundWorkIncrease-given").onclick = function() {
+    Input.clearFundIncreaseRadiosWork();
+  };
+
+  document.getElementById("inquiry-fundRetireIncrease-given").onclick = function() {
+    Input.clearFundIncreaseRadiosRetire();
+  };
+
+  document.getElementById("inquiry-fundWorkIncrease-zero").onfocus = function() {
+    Input.clearFundWorkIncreaseGiven();
+  }
+  document.getElementById("inquiry-fundWorkIncrease-inflation").onfocus = function() {
+    Input.clearFundWorkIncreaseGiven();
+  }
+
+  document.getElementById("inquiry-fundRetireIncrease-zero").onfocus = function() {
+    Input.clearFundRetireIncreaseGiven();
+  }
+  document.getElementById("inquiry-fundRetireIncrease-inflation").onfocus = function() {
+    Input.clearFundRetireIncreaseGiven();
+  }
+}
+
 document.getElementById('start').onclick = function() {
 
   // 0. Убираем класс ошибки из полей ввода
@@ -43,7 +91,6 @@ document.getElementById('start').onclick = function() {
   // Полученный массив funds передаем графику и строим этот график.active
     graphics.chartData = funds;
     graphics.drawBasic(); 
-  
 //debugger
 }
 
