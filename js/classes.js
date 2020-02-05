@@ -228,7 +228,7 @@ class Input {
 // Объект с методами, формирующими объекты/массивы, 
 // описывающиt все факторы прихода/расхода (т.е. пенсионный взнос, зарплаты, траты и пр.)
 let assets = {
-  retiredChargeObj (retiredChagre, retiredAge, currentAge, startPaymentMonth=1) {
+  retiredChargeObj (retiredChagre, retiredChargePaid, retiredAge, currentAge, startPaymentMonth=1) {
     let answer = {};
     answer.amount = retiredChagre;
     answer.inAction = [];
@@ -237,6 +237,8 @@ let assets = {
     for (let i = startPaymentMonth; i <= duration; i++) {
       answer.inAction.push(i);
     }
+
+    answer.paidAt = retiredChargePaid;
 
     return answer;
   },
@@ -310,13 +312,12 @@ class Client {
     this.birthdayArr = input.birthdayArr; // строка в формате ДД.ММ.ГГГ
     this.retiredAge = input.retiredAge;
     this.retiredPension = input.retiredPension;
-    this.retiredCharge = assets.retiredChargeObj(input.retiredCharge, this.retiredAge, this.age);
+    this.retiredPensionTaken = input.retiredPensionTaken;
+    this.retiredCharge = assets.retiredChargeObj(input.retiredCharge, input.retiredChargePaid, this.retiredAge, this.age);
     this._initialFund = input.initialFund;
     this.assets = input.assets;
     this.workFundIncrease = input.workFundIncrease;
     this.retireFundIncrease = input.retireFundIncrease;
-    this.retiredChargePaid = input.retiredChargePaid;
-    this.retiredPensionTaken = input.retiredPensionTaken;
   }
 
   get birthdayObj() {
@@ -345,40 +346,68 @@ class Client {
   }
 
   getData(period) {
-    return Month.makeMonthsArr(period, this.initialFund, this.retiredCharges)
+    return Month.makeMonthsArr(period, this)
   }
 }
 
 // Класс для создания объектов "месяц" и создания массивов из этих объектов
 class Month {
-  // constructor(number, initialFund, retiredCharge, retiredAge, age, retiredPension) {
-  constructor(number, initialFund, client) {
-     this._number = number;
-    
+  constructor(number, previousFund, previousDateObj, client) {
+    this._number = number;
+    this.date = new Date(previousDateObj.getFullYear(), (previousDateObj.getMonth() + 1));
+
+        
     //вычисляемые свойства:
-    this.fund = initialFund;
-    if (client.retiredCharge.inAction.includes(this.number)) {
-      this.fund += client.retiredCharge.amount;
+    let ifRetired = this.number > (client.retiredAge - client.age);
+    
+    
+    this.fundStart = previousFund;
+    if (client.retiredCharge.inAction.includes(this.number) && client.retiredCharge.paidAt == 'start') {
+      this.fundStart += client.retiredCharge.amount;
     }
-    if (this.number > (client.retiredAge - client.age)) {
-      this.fund -= client.retiredPension;
+  
+    if (ifRetired && client.retiredPensionTaken == 'start') {
+      this.fundStart -= client.retiredPension;      
     }
 
-
+    this.fundEnd = this.fundStart;
+    if (client.retiredCharge.inAction.includes(this.number) && client.retiredCharge.paidAt == 'end') {
+      this.fundEnd += client.retiredCharge.amount;
+    }
+    if (ifRetired && client.retiredPensionTaken == 'end') {
+      this.fundEnd -= client.retiredPension;
+    }
+    let fundIncreasePersent = null; //процентная ставка для текущего месяца
+    if(!ifRetired) {fundIncreasePersent = client.workFundIncrease;}
+    if(ifRetired) {fundIncreasePersent = client.retireFundIncrease;}
+    let fundIncreaseSum = ((fundIncreasePersent / 100) * this.daysInMonth / this.daysInYear) * this.fundStart;
+    this.fundEnd += fundIncreaseSum;    
   } 
+  
 
   get number() {return this._number};
 
+  get daysInMonth() {
+    return new Date(this.date.getFullYear(), this.date.getMonth() + 1, 0).getDate();
+  }
+
+  get daysInYear() {
+    let lastFebDate = new Date(this.date.getFullYear(), 2, 0).getDate();
+    if (lastFebDate == 29) return 366;
+    if (lastFebDate == 28) return 365;
+  }
+
   // Статические методы и свойства:
-  // static makeMonthsArr(period, initialFund, retiredCharge, retiredAge, age, retiredPension) {
   static makeMonthsArr(period, client) {
     let monthsArr = [];
-    let firstMonth = new this(1, client.initialFund, client); 
+    let today = new Date()
+    let previousDateObj = new Date(today.getFullYear(), (today.getMonth() - 1));
+    let firstMonth = new this(1, client.initialFund, previousDateObj, client); 
     monthsArr.push(firstMonth);
     
     for (let i = 2; i <= period; i++) {
       let lastMonth = monthsArr[monthsArr.length - 1];
-      let newMonth = new this(i, lastMonth.fund, client);
+      let newMonth = new this(i, lastMonth.fundEnd, lastMonth.date, client);
       monthsArr.push(newMonth);
     }
 
@@ -393,13 +422,13 @@ class Data {
     this.maxLength = arrOfObjs.length;
   }
 
-  getFunds(client) {
+  getEndFunds(client) {
     let answer = [];
 
     answer.push([0, client.initialFund, null, null]);
 
     for (let i = 1; i <= this.maxLength; i++) {
-      let fundAmount = this.source[i-1].fund;
+      let fundAmount = this.source[i-1].fundEnd;
       if (fundAmount < 0) break;
       let monthFund = [i, fundAmount, null, null];
       answer.push(monthFund);
