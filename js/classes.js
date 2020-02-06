@@ -365,12 +365,14 @@ class Month {
   constructor(number, previousFund, previousDateObj, client) {
     this._number = number;
     this.date = new Date(previousDateObj.getFullYear(), (previousDateObj.getMonth() + 1));
-
         
     //вычисляемые свойства:
     let ifRetired = this.number > (client.retiredAge - client.age);
     
-    
+    //процентная ставка для текущего месяца
+    if(!ifRetired) {this.fundIncreasePersent = client.workFundIncrease;}
+    if(ifRetired) {this.fundIncreasePersent = client.retireFundIncrease;}
+
     this.fundStart = previousFund;
     if (client.retiredCharge.inAction.includes(this.number) && client.retiredCharge.paidAt == 'start') {
       this.fundStart += client.retiredCharge.amount;
@@ -387,11 +389,56 @@ class Month {
     if (ifRetired && client.retiredPensionTaken == 'end') {
       this.fundEnd -= client.retiredPension;
     }
-    let fundIncreasePersent = null; //процентная ставка для текущего месяца
-    if(!ifRetired) {fundIncreasePersent = client.workFundIncrease;}
-    if(ifRetired) {fundIncreasePersent = client.retireFundIncrease;}
-    let fundIncreaseSum = ((fundIncreasePersent / 100) * this.daysInMonth / this.daysInYear) * this.fundStart;
-    this.fundEnd += fundIncreaseSum;    
+
+    
+    //Вычисляем суммы начислений по процентам на пенсионные сбережения
+    // две вспомогательные функциии
+    function getMonthDelta(month) {
+      return ((month.fundIncreasePersent / 100) * month.daysInMonth / month.daysInYear) * month.fundStart;
+    }
+
+    function getTotalFundIncrease(monthsNum, currentThis) {
+      let totalFundIncreaseSum = 0;
+      for (let i = monthsNum; i > 1; i--) {
+        let currentMonth = Month.monthsArr[currentThis.number - i];
+        totalFundIncreaseSum += getMonthDelta(currentMonth);
+      }
+      totalFundIncreaseSum += getMonthDelta(currentThis);
+      return totalFundIncreaseSum;
+    }
+    //--------------------------------------------
+    if (client.fundIncreaseRate == 'month') {
+      let fundIncreaseSum = getMonthDelta(this);
+      this.fundEnd += fundIncreaseSum;    
+    }
+
+    if (client.fundIncreaseRate == 'quarter' && this.number % 3 == 0) {
+ /*      let month_1 = Month.monthsArr[this.number - 3]; // на всякий случай - первый вариант кода расчета, без цикла
+      let month_1_fundIncreaseSum = getMonthDelta(month_1);
+      let month_2 = Month.monthsArr[this.number - 2];
+      let month_2_fundIncreaseSum = getMonthDelta(month_2);
+      let month_3 = this;
+      let month_3_fundIncreaseSum = getMonthDelta(month_3);
+      let totalFunIncreaseSum = month_1_fundIncreaseSum + month_2_fundIncreaseSum + month_3_fundIncreaseSum;      
+      this.fundEnd += totalFunIncreaseSum; */
+
+      let currentThis = this;
+      let fundIncreaseSum = getTotalFundIncrease(3, currentThis);
+      this.fundEnd += fundIncreaseSum;      
+    }
+
+    if (client.fundIncreaseRate == 'halfYear' && this.number % 6 == 0) {
+      let currentThis = this;
+      let fundIncreaseSum = getTotalFundIncrease(6, currentThis);
+      this.fundEnd += fundIncreaseSum;  
+    }
+
+    if (client.fundIncreaseRate == 'year' && this.number % 12 == 0) {
+      let currentThis = this;
+      let fundIncreaseSum = getTotalFundIncrease(12, currentThis);
+      this.fundEnd += fundIncreaseSum;  
+    }
+
   } 
   
 
@@ -409,20 +456,20 @@ class Month {
 
   // Статические методы и свойства:
   static makeMonthsArr(period, client) {
-    let monthsArr = [];
+    this.monthsArr = [];
     let today = new Date()
     // let previousDateObj = new Date(today.getFullYear(), (today.getMonth() - 1));
     let previousDateObj = new Date(today.getFullYear(), today.getMonth());
     let firstMonth = new this(1, client.initialFund, previousDateObj, client); 
-    monthsArr.push(firstMonth);
+    this.monthsArr.push(firstMonth);
     
     for (let i = 2; i <= period; i++) {
-      let lastMonth = monthsArr[monthsArr.length - 1];
+      let lastMonth = this.monthsArr[this.monthsArr.length - 1];
       let newMonth = new this(i, lastMonth.fundEnd, lastMonth.date, client);
-      monthsArr.push(newMonth);
+      this.monthsArr.push(newMonth);
     }
 
-    return monthsArr;
+    return this.monthsArr;
   }
 }
 
