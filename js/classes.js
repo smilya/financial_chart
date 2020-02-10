@@ -47,6 +47,16 @@ class Input {
     let fieldAssets_3 = document.getElementById('assets-increase');
     let fieldAssets_4 = document.getElementById('assets-decrease');
     let fieldAssets_5 = document.getElementById('assets-closure');
+    let fieldAssets_6 = document.getElementById('assets-closeAtStart');
+    let fieldAssets_7 = document.getElementById('assets-closeAtEnd');
+    let fieldAssets_8 = document.getElementById('assets-currencyType');
+    let fieldAssets_9 = document.getElementById('assets-income');
+    let fieldAssets_10 = document.getElementById('assets-incomeChange');
+    let fieldAssets_11 = document.getElementById('assets-incomeChangeRate');
+    let fieldAssets_12 = document.getElementById('assets-increaseMonth');
+    let fieldAssets_13 = document.getElementById('assets-increaseQuarter');
+    let fieldAssets_14 = document.getElementById('assets-increaseHalfYear');
+    let fieldAssets_15 = document.getElementById('assets-increaseYear');
     let workFundIncrease_zero = document.getElementById("inquiry-fundWorkIncrease-zero");
     let workFundIncrease_inflation = document.getElementById("inquiry-fundWorkIncrease-inflation");
     let workFundIncrease_given = document.getElementById("inquiry-fundWorkIncrease-given");

@@ -148,6 +148,7 @@ body {
 }
 .assets > div > div {
   display: inline-block;
+  position: relative;
 }
 .assets > div > div label {
   display: inline-flex;
@@ -206,6 +207,17 @@ body {
 .assets > div > div select {
   background-color: cornsilk;
   font-weight: bold;
+}
+.assets > div > div #assets-incomeChange {
+  width: 35px;
+  margin-right: 7px;
+}
+.assets > div > div #slash {
+  font-weight: bold;
+  font-size: 35px;
+  position: absolute;
+  bottom: -8px;
+  left: 35px;
 }
 .assets p {
   margin-top: 5px;

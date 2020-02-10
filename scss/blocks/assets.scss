@@ -15,6 +15,7 @@
 
     &>div {
     display: inline-block;
+    position: relative;
 
       label {
         display: inline-flex;
@@ -90,6 +91,19 @@
       select {
         background-color: cornsilk;
         font-weight: bold;
+      }
+
+      #assets-incomeChange {
+        width: 35px;
+        margin-right: 7px;
+      }
+
+      #slash {
+        font-weight: bold;
+        font-size: 35px;
+        position: absolute;
+        bottom: -8px;
+        left: 35px;
       }
     }
   }  
