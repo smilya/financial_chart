@@ -4,7 +4,8 @@
   "description": "Strategic financial chart construction",
   "main": "script.js",
   "scripts": {
-    "sass": "sass --watch scss/:css/"
+    "sass": "sass --watch scss/:css/",
+    "sync": "browser-sync start --server --files css/*.css, ./*.html, js/*.js"
   },
   "repository": {
     "type": "git",

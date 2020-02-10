@@ -140,10 +140,55 @@
       <div>
         <label for="assets-closure">Дата<br>закрытия/продажи</label><br>
         <input class="fieldAssets" type="text" id="assets-closure">
+        <div class="checkboxDiv">
+          <div class="checkboxSubDiv">
+            <input type="radio" name="closeAt" id="assets-closeAtStart" checked>
+            <label for="assets-closeAtStart">В начале месяца</label>
+          </div>
+          <div class="checkboxSubDiv">
+            <input type="radio" name="closeAt" id="assets-closeAtEnd">
+            <label for="assets-closeAtEnd">В конце месяца</label>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div id="assets-addAsset" class="button mb-10">Добавить актив</div>
+    <div>
+      <div>
+        <label for="assets-currencyType">Валюта<br>актива</label><br>
+        <select name="currencyType" id="assets-currencyType">
+          <option value="rub">Рубли</option>
+          <option value="eur">Евро</option>
+          <option value="usd">Доллары США</option>
+        </select>        
+      </div>
+
+      <div>
+        <label for="assets-income">Доход<br>(ежемесячный)</label><br>
+        <input class="fieldAssets" type="text" id="assets-income" value="0">
+      </div>
+
+      <div>
+        <label for="assets-incomeChange">Динамика<br>дохода</label><br>
+        <input class="fieldAssets" type="text" id="assets-incomeChange" value="0%">
+      </div>
+
+      <div>
+        <p>Капитализация</p>
+        <fieldset class="assets-increaseFieldset">
+          <input name="assets-increaseRate" id="assets-increaseMonth" type="radio">
+          <label for="assets-increaseMonth">раз в месяц</label>
+          <input name="assets-increaseRate" id="assets-increaseQuarter" type="radio">
+          <label for="assets-increaseQuarter">раз в квартал</label>
+          <input name="assets-increaseRate" id="assets-increaseHalfYear" type="radio">
+          <label for="assets-increaseHalfYear">раз в полгода</label>
+          <input name="assets-increaseRate" id="assets-increaseYear" type="radio" checked>
+          <label for="assets-increaseYear">раз в год</label>
+        </fieldset>
+      </div>
+    </div>
+
+    <div id="assets-addAsset" class="button mb-10 mt-20">Добавить актив</div>
     
   </div>
 
