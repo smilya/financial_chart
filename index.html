@@ -110,17 +110,17 @@
 
     <div>
       <div>
-        <label for="assets-title"><span>Название</span></label><br>
+        <label for="assets-title"><span id="assets-titleLabel">Название</span></label><br>
         <input class="fieldAssets" type="text" id="assets-title">
       </div>
   
       <div>
-        <label for="assets-value">Сумма/стоимость<br>на сегодня</label><br>
+        <label id="assets-valueLabel" for="assets-value">Сумма/стоимость<br>на сегодня</label><br>
         <input class="fieldAssets" type="text" id="assets-value">
       </div>
   
       <div>
-        <label for="assets-increase">Ставка<br>процента/удорожание</label><br>
+        <label id="assets-increaseLabel" for="assets-increase">Ставка<br>процента/удорожание</label><br>
         <input class="fieldAssets" type="text" id="assets-increase"><br>
         <div class="checkboxDiv">
           <input type="radio" name="valueChange" id="assets-inflationIncrease">
@@ -129,7 +129,7 @@
       </div>
   
       <div>
-        <label for="assets-decrease">Ставка<br>удешевления</label><br>
+        <label id="assets-decreaseLabel" for="assets-decrease">Ставка<br>удешевления</label><br>
         <input class="fieldAssets" type="text" id="assets-decrease">
         <div class="checkboxDiv">
           <input type="radio" name="valueChange" id="assets-inflationDecrease">
@@ -142,11 +142,11 @@
         <input class="fieldAssets" type="text" id="assets-closure">
         <div class="checkboxDiv">
           <div class="checkboxSubDiv">
-            <input type="radio" name="closeAt" id="assets-closeAtStart" checked>
+            <input type="radio" name="closeAt" id="assets-closeAtStart" disabled>
             <label for="assets-closeAtStart">В начале месяца</label>
           </div>
           <div class="checkboxSubDiv">
-            <input type="radio" name="closeAt" id="assets-closeAtEnd">
+            <input type="radio" name="closeAt" id="assets-closeAtEnd" disabled>
             <label for="assets-closeAtEnd">В конце месяца</label>
           </div>
         </div>
@@ -174,8 +174,15 @@
         <span id="slash">/</span>
         <select name="incomeChangeRate" id="assets-incomeChangeRate">
           <option value="year">1 год</option>
-          <option value="2_years"> 2 года</option>
+          <option value="2_years">2 года</option>
+          <option value="3_years">3 года</option>
         </select>
+        <div class="checkboxDiv">
+          <div class="checkboxSubDiv">
+            <input type="checkbox" id="assets-incomeChangeRateInflation">
+            <label for="assets-incomeChangeRateInflation">Темпами инфляции</label>
+          </div>
+        </div>
       </div>
 
       <div>
@@ -190,6 +197,14 @@
           <input name="assets-increaseRate" id="assets-increaseYear" type="radio" checked>
           <label for="assets-increaseYear">раз в год</label>
         </fieldset>
+        <div class="checkboxDiv mt-5">
+          <div class="checkboxSubDiv">
+            <input type="radio" name="assets-increaseTo" id="assets-increaseToValue" checked>
+            <label for="assets-increaseToValue">Начисления увеличивают стоимость актива</label>
+            <input type="radio" name="assets-increaseTo" id="assets-increaseToFund" class="ml-10">
+            <label for="assets-increaseToFund">Начисления выводятся в фонд</label>
+          </div>
+        </div>
       </div>
     </div>
 

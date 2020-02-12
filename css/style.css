@@ -1,3 +1,7 @@
+.mt-5 {
+  margin-top: 5px;
+}
+
 .mt-10 {
   margin-top: 10px;
 }
@@ -157,6 +161,12 @@ body {
   font-size: 16px;
   margin-bottom: 5px;
 }
+.assets > div > div label.error {
+  color: red;
+}
+.assets > div > div #assets-titleLabel.error {
+  color: red;
+}
 .assets > div > div input {
   font-size: 14px;
   font-weight: bold;
@@ -216,7 +226,7 @@ body {
   font-weight: bold;
   font-size: 35px;
   position: absolute;
-  bottom: -8px;
+  bottom: 10px;
   left: 35px;
 }
 .assets p {

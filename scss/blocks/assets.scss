@@ -23,7 +23,15 @@
         align-items: center;
         font-size: 16px;
         margin-bottom: 5px;
+
+        &.error {
+          color: red;
         }
+        }
+
+      #assets-titleLabel.error {
+        color: red;
+      }
 
       input {
         font-size: 14px;
@@ -102,7 +110,7 @@
         font-weight: bold;
         font-size: 35px;
         position: absolute;
-        bottom: -8px;
+        bottom: 10px;
         left: 35px;
       }
     }

@@ -31,10 +31,43 @@ google.charts.setOnLoadCallback(graphics.drawBasic);
     Input.clearValueChange();
   }
 
-  document.getElementById('assets-addAsset').onclick = function() {
-    if (!assets.addAsset()) return;
+  document.getElementById('assets-addAsset').onclick = function() { 
+    if (!assets.addAsset()) return; 
     Input.listAssets(Input.newAssetsArr);
   };
+
+  document.getElementById('assets-closure').oninput = function() {
+    let closeAtStartField = document.getElementById('assets-closeAtStart');
+    let closeAtEndField = document.getElementById('assets-closeAtEnd');
+    if (document.getElementById('assets-closure').value != '') {
+      closeAtStartField.disabled = false;
+      closeAtStartField.checked = true;
+      closeAtEndField.disabled = false;
+    }
+    else {
+      closeAtStartField.disabled = true;
+      closeAtStartField.checked = false;
+      closeAtEndField.disabled = true;  
+    }    
+  };
+
+  document.getElementById('assets-incomeChangeRateInflation').onclick = function () {
+    let checkbox = document.getElementById('assets-incomeChangeRateInflation');
+    let changeField = document.getElementById('assets-incomeChange');
+    let changeRateField = document.getElementById('assets-incomeChangeRate');
+    if (checkbox.checked == true) {
+      changeField.value = document.getElementById('generalData-inflationRate').value;
+      changeField.disabled = true;
+      changeRateField.value = 'year';
+      changeRateField.disabled = true;
+    }
+    else {
+      changeField.value = '0%';
+      changeField.disabled = false;
+      changeRateField.value = 'year';
+      changeRateField.disabled = false;
+    }
+  }
 
   document.getElementById("inquiry-fundWorkIncrease-given").onclick = function() {
     Input.clearFundIncreaseRadiosWork();
@@ -91,7 +124,7 @@ document.getElementById('start').onclick = function() {
   // 7. Полученный массив funds передаем графику и строим этот график.active
     graphics.chartData = funds;
     graphics.drawBasic(); 
-// debugger
+  // debugger
 }
 
 

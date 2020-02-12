@@ -9,3 +9,12 @@ document.getElementById("inquiry-birthday").value = '02.04.1987';
 document.getElementById("inquiry-retired").value = '60 лет';
 document.getElementById("inquiry-income").value = '40000 руб';
 document.getElementById("inquiry-payment").value = '50000 руб';
+
+
+//=====================================
+document.getElementById('assets-title').value = 'TEST-1';
+document.getElementById('assets-value').value = '1000';
+document.getElementById('assets-increase').value = '10%';
+document.getElementById('assets-closure').value = '06.2020';
+document.getElementById('assets-closeAtStart').checked = true;
+document.getElementById('assets-increaseMonth').checked = true;
