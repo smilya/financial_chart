@@ -310,15 +310,6 @@ let assets = {
         i.classList.remove('error');
       }
     
-/*     titleField.classList.remove('error');
-    titleFieldLabel.classList.remove('error');
-    valueField.classList.remove('error');
-    increaseField.classList.remove('error');
-    decreaseField.classList.remove('error');
-    closureDateField.classList.remove('error');
-    assetIncomeField.classList.remove('error');
-    assetIncomeChangeField.classList.remove('error'); */
-
     if(increaseField.value != 0 && decreaseField.value != 0) assets.fieldErrorFlag = true;
     if (titleField.value == '') {
       assets.fieldErrorFlag = true;
@@ -518,6 +509,15 @@ class Month {
       this.fundStart -= client.retiredPension;      
     }
 
+    for (let assetObj of client.assets) { 
+      // перебираем массив объектов assets. Чтобы добавить сумму, если она будет внесена в начале месяца через Активы
+
+      if (assetObj.inAction.length == 0 && assetObj.value > 0 && (this.date.getMonth() + 1) == assetObj.closureDateArr[0] && this.date.getFullYear() == assetObj.closureDateArr[1]) {
+        this.fundStart += Month.exchangeToRubs(assetObj, assetObj.value); 
+      }
+    }  
+
+// --------------fundEnd computed---(no fundStart change allowed------------
     this.fundEnd = this.fundStart;
     if (client.retiredCharge.inAction.includes(this.number) && client.retiredCharge.paidAt == 'end') {
       this.fundEnd += client.retiredCharge.amount;
@@ -566,10 +566,15 @@ class Month {
       this.fundEnd += fundIncreaseSum;  
     }
 
-    // Вычисляем начисления по активам
+
+    // Вычисляем начисления по активам и общую стоимость активов
+    let totalAssetsValueAtStart = 0;
+    let totalAssetsValueAtEnd = 0;
     for (let assetObj of client.assets) { 
       // перебираем массив объектов. assetObj - объект со всеми свойствами актива
       if (!assetObj.inAction.includes(this.number) && assetObj.inAction != 'all') continue;
+
+      totalAssetsValueAtStart += assetObj.value;
 
       // функции для расчета прироста по вкладу за период
       function getMonthValueChange(month) {
@@ -584,26 +589,16 @@ class Month {
         answer += getMonthValueChange(currentThis);
         return answer;
       }
-      function exchangeToRubs(sum) {
-        if(assetObj.currencyType == 'eur') {
-          return sum * client.EURrate;
-        }
-        if (assetObj.currencyType == 'usd') {
-          return sum * client.USDrate;
-        }
-        if (assetObj.currencyType == 'rub') {
-          return sum;
-        }
-      }
+
       function transferMoney(sum, month) {
         if (assetObj.valueChangeTo == 'value') {
           assetObj.value += sum;
          }
         if (assetObj.valueChangeTo == 'fund') {
-          sum = exchangeToRubs(sum);
+          sum = Month.exchangeToRubs(assetObj, sum);
           month.fundEnd += sum;
-        }
-      }
+         }
+      } 
 
       if (assetObj.valueChangeRate == 'month') {
         let valueChangeSum = getMonthValueChange(this);
@@ -624,15 +619,15 @@ class Month {
         let totalValueChangeSum = getTotalValueChange(12, this);
         transferMoney(totalValueChangeSum);
       }
-      
+     
       //Если последни месяц инЭкшн, снимаем деньги и переводим в фонд, пересчитав их на рубли с валюты
       if (!assetObj.inAction.includes(this.number + 1) && assetObj.inAction != 'all') {
         let totalSum = assetObj.value;
-        totalSum = exchangeToRubs(totalSum);
+        totalSum = Month.exchangeToRubs(assetObj, totalSum);
         if (assetObj.closeAt == 'end') {          
           this.fundEnd += totalSum;
         }
-        if (assetObj.closeAt == 'start') {
+        if (assetObj.closeAt == 'start') { 
           this.toAddToNextFundStart += totalSum;
         }
       }
@@ -656,9 +651,14 @@ class Month {
         incomeChange(3, this);
       }
       // Добавляем доход к fundEnd
-      let incomeInRubs = exchangeToRubs(assetObj.income);
+      let incomeInRubs = Month.exchangeToRubs(assetObj, assetObj.income);
       this.fundEnd += incomeInRubs;
+
+      totalAssetsValueAtEnd += assetObj.value;
     }
+
+    this.capitalStart = this.fundStart + totalAssetsValueAtStart;
+    this.capitalEnd = this.fundEnd + totalAssetsValueAtEnd;
 
   } 
   
@@ -691,6 +691,18 @@ class Month {
     }
 
     return this.monthsArr;
+  }
+
+  static exchangeToRubs(assetObj, sum) {
+    if(assetObj.currencyType == 'eur') {
+      return sum * client.EURrate;
+    }
+    if (assetObj.currencyType == 'usd') {
+      return sum * client.USDrate;
+    }
+    if (assetObj.currencyType == 'rub') {
+      return sum;
+    }
   }
 }
 
