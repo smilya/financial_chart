@@ -46,7 +46,8 @@ class Input {
     let fieldAssets_2 = document.getElementById('assets-value');
     let fieldAssets_3 = document.getElementById('assets-increase');
     let fieldAssets_4 = document.getElementById('assets-decrease');
-    let fieldAssets_5 = document.getElementById('assets-closure');
+    let fieldAssets_5 = document.getElementById('assets-starting');
+    let fieldAssets_6 = document.getElementById('assets-closure');
     let workFundIncrease_zero = document.getElementById("inquiry-fundWorkIncrease-zero");
     let workFundIncrease_inflation = document.getElementById("inquiry-fundWorkIncrease-inflation");
     let workFundIncrease_given = document.getElementById("inquiry-fundWorkIncrease-given");
@@ -117,7 +118,7 @@ class Input {
     this.USDrate = parseFloat(fieldUSDrate.value);
     this.EURrate = parseFloat(fieldEURrate.value);
 
-    if (fieldAssets_1.value != 0 || fieldAssets_2.value != 0 || fieldAssets_3.value != 0 || fieldAssets_4.value != 0 || fieldAssets_5.value != 0) {
+    if (fieldAssets_1.value != 0 || fieldAssets_2.value != 0 || fieldAssets_3.value != 0 || fieldAssets_4.value != 0 || fieldAssets_5.value != 0 || fieldAssets_6.value != 0) {
       this.dataError = true;
       let fields = document.querySelectorAll('.fieldAssets');
       for (let i of fields) {
@@ -312,6 +313,9 @@ let assets = {
     let decreaseInflation = document.getElementById("assets-inflationDecrease");
     let valueChangeToValueField = document.getElementById("assets-increaseToValue");
     let valueChangeToFundField = document.getElementById("assets-increaseToFund");
+    let startingDateField = document.getElementById('assets-starting');
+    let startingAtStartField = document.getElementById('assets-startingAtStart');
+    let startingAtEndField = document.getElementById('assets-startingAtEnd');
     let closureDateField = document.getElementById('assets-closure');
     let closeAtStart = document.getElementById('assets-closeAtStart');
     let closeAtEnd = document.getElementById('assets-closeAtEnd');
@@ -376,6 +380,21 @@ let assets = {
     if (assetIncreaseHalfYear.checked) answer.valueChangeRate = 'halfYear';
     if (assetIncreaseYear.checked) answer.valueChangeRate = 'year';
 
+    let startingDate = startingDateField.value.split('.');
+      if (startingDate[2] != undefined) {
+        startingDate.shift();
+      }
+      startingDate[0] = +startingDate[0];
+      startingDate[1] = +startingDate[1];
+
+    if (isNaN(startingDate[0]) || isNaN(startingDate[1]) || (new Date() >= new Date(startingDate[1], (startingDate[0] - 1)) ) ) {
+      startingDateField.classList.add("error");
+      document.getElementById("assets-startingLabel").classList.add('error');
+      assets.fieldErrorFlag = true;
+    }
+
+    answer.startingDateArr = startingDate;  
+
     if (closureDateField.value.trim() == '') answer.closureDateArr = null;
     else {
       let closureDate = closureDateField.value.split('.');
@@ -386,15 +405,18 @@ let assets = {
       closureDate[1] = +closureDate[1]; 
       if (isNaN(closureDate[0]) || closureDate[0] > 12 || closureDate[0] <= 0 || isNaN(closureDate[1]) || closureDate[1] < new Date().getFullYear()) {
         closureDateField.classList.add('error');
-        assets.fieldErrorFlag = true;
+        assets.fieldErrorFlag = true; 
       }
       answer.closureDateArr = closureDate; 
-    }
+    } 
 
     if (closeAtStart.checked == true) answer.closeAt = 'start';
     if (closeAtEnd.checked == true) answer.closeAt = 'end';    
+
+    if (startingAtStartField.checked == true) answer.startingAt = 'start';
+    if (startingAtEndField.checked == true) answer.startingAt = 'end';
     
-    answer.inAction = 'all';
+    answer.inAction = 'all'; 
     if (answer.closureDateArr) {
       let today = new Date();
       let thisYear = today.getFullYear();
@@ -402,14 +424,28 @@ let assets = {
       let subtractOne = 0;
       if (answer.closeAt == 'start') {subtractOne = 1;}
       let lastDate = new Date(answer.closureDateArr[1], answer.closureDateArr[0] - 1 - subtractOne);
-      let inActionArr = [];
-      let i = 1; // если есть дата начала, то начинаем с нее, не с единицы 
-      while(true) { 
-        if ( new Date(thisYear, thisMonth + i) > lastDate ) break;
-        inActionArr.push(i);
-        i++;
+      let inActionArr = []; 
+      // Тут определяется номер первого месяца в inActionArr
+      let monthNum = 0;
+      let startingDateTimestamp = (new Date(answer.startingDateArr[1], (answer.startingDateArr[0] - 1))).getTime();
+ 
+      while (true) {
+        monthNum += 1;
+        let currentMonthTimestamp = (new Date(thisYear, (thisMonth + monthNum))).getTime();
+        if (startingDateTimestamp <= currentMonthTimestamp) break;
       }
-      answer.inAction = inActionArr;
+
+      if (answer.startingAt == 'end') {monthNum++}
+      
+      let i = monthNum; // начинаем заполнять inAction c номера 
+      if (!isNaN(answer.closureDateArr[0]) && !isNaN(answer.closureDateArr[1])) {
+        while(true) { 
+          if ( new Date(thisYear, thisMonth + i) > lastDate ) break;
+          inActionArr.push(i);
+          i++;
+        }
+      }
+      answer.inAction = inActionArr; 
     }
       
     answer.currencyType = currencyType.value;
@@ -448,6 +484,7 @@ let assets = {
     assetIncomeChangeField.value = '0%';
     assetIncomeChangeRate.value = 'year';
     assetIncreaseYear.checked = true;
+    startingDateField.value = '';
     closeAtStart.disabled = true;
     closeAtStart.checked = false;
     closeAtEnd.disabled = true;
@@ -593,8 +630,15 @@ class Month {
     // Вычисляем начисления по активам и общую стоимость активов
     let totalAssetsValueAtStart = 0;
     let totalAssetsValueAtEnd = 0;
-    for (let assetObj of client.assets) { 
+    for (let assetObj of client.assets) {
       // перебираем массив объектов. assetObj - объект со всеми свойствами актива
+     
+      // ситуация, когда мы добавили актив в конце месяца, в его inAction нет этого месяца, но нужно добавить к стоимости всех активов его стоимость
+      // мы сейчас перебираем активы - смотрим, если в inAction нет этого месяца но есть следующий и стоит галочка "открыт в конце месяца" (assetObj.startingAt == 'end')
+      if (assetObj.startingAt == 'end' && !assetObj.inAction.includes(this.number) && assetObj.inAction.includes(this.number + 1)) {
+        totalAssetsValueAtEnd += assetObj.value;
+      }
+     
       if (!assetObj.inAction.includes(this.number) && assetObj.inAction != 'all') continue;
 
       totalAssetsValueAtStart += assetObj.value;
@@ -678,13 +722,13 @@ class Month {
       this.fundEnd += incomeInRubs;
 
       totalAssetsValueAtEnd += assetObj.value;
+      
     }
 
     this.capitalStart = this.fundStart + totalAssetsValueAtStart;
     this.capitalEnd = this.fundEnd + totalAssetsValueAtEnd;
 
-  } 
-  
+  }   
 
   get number() {return this._number};
 

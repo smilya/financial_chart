@@ -136,7 +136,46 @@
           <label for="assets-inflationDecrease">Удешевление темпами<br>инфляции</label>
         </div>
       </div>
-  
+    </div>
+
+    <div>
+      <div>
+        <p>Капитализация</p>
+        <fieldset class="assets-increaseFieldset">
+          <input name="assets-increaseRate" id="assets-increaseMonth" type="radio">
+          <label for="assets-increaseMonth">раз в месяц</label>
+          <input name="assets-increaseRate" id="assets-increaseQuarter" type="radio">
+          <label for="assets-increaseQuarter">раз в квартал</label>
+          <input name="assets-increaseRate" id="assets-increaseHalfYear" type="radio">
+          <label for="assets-increaseHalfYear">раз в полгода</label>
+          <input name="assets-increaseRate" id="assets-increaseYear" type="radio" checked>
+          <label for="assets-increaseYear">раз в год</label>
+        </fieldset>
+        <div class="checkboxDiv mt-5">
+          <div class="checkboxSubDiv">
+            <input type="radio" name="assets-increaseTo" id="assets-increaseToValue" checked>
+            <label for="assets-increaseToValue">Начисления увеличивают стоимость актива</label>
+            <input type="radio" name="assets-increaseTo" id="assets-increaseToFund" class="ml-10">
+            <label for="assets-increaseToFund">Начисления выводятся в фонд</label>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <label id="assets-startingLabel" for="assets-starting">Дата<br>открытия/покупки</label><br>
+        <input class="fieldAssets" type="text" id="assets-starting">
+        <div class="checkboxDiv">
+          <div class="checkboxSubDiv">
+            <input type="radio" name="startingAt" id="assets-startingAtStart" checked>
+            <label for="assets-startingAtStart">В начале месяца</label>
+          </div>
+          <div class="checkboxSubDiv">
+            <input type="radio" name="startingAt" id="assets-startingAtEnd">
+            <label for="assets-startingAtEnd">В конце месяца</label>
+          </div>
+        </div>
+      </div> 
+
       <div>
         <label for="assets-closure">Дата<br>закрытия/продажи</label><br>
         <input class="fieldAssets" type="text" id="assets-closure">
@@ -150,7 +189,7 @@
             <label for="assets-closeAtEnd">В конце месяца</label>
           </div>
         </div>
-      </div>
+      </div>      
     </div>
 
     <div>
@@ -185,7 +224,7 @@
         </div>
       </div>
 
-      <div>
+<!--       <div>
         <p>Капитализация</p>
         <fieldset class="assets-increaseFieldset">
           <input name="assets-increaseRate" id="assets-increaseMonth" type="radio">
@@ -205,7 +244,7 @@
             <label for="assets-increaseToFund">Начисления выводятся в фонд</label>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
 
     <div id="assets-addAsset" class="button mb-10 mt-20">Добавить актив</div>

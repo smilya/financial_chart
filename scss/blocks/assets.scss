@@ -9,13 +9,14 @@
   
   &>div {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: flex-start;
-    margin-bottom: 5px;
+    margin-bottom: 20px;
 
     &>div {
     display: inline-block;
     position: relative;
+    margin-right: 30px;
 
       label {
         display: inline-flex;
