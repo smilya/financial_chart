@@ -12,8 +12,8 @@ let graphics = {
     var data = new google.visualization.DataTable();
     data.addColumn('number', 'X');
     data.addColumn('number', 'Накопления');
-    data.addColumn('number', 'Data 2');// добавляем новые графики,  
-    data.addColumn('number', 'Data 3');// в подмассивах chartData должно быть столько же членов
+    data.addColumn('number', 'Капитал');// добавляем новые графики,  
+    data.addColumn('number', '');// в подмассивах chartData должно быть столько же членов
      
     data.addRows(graphics.chartData);
     var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
@@ -253,6 +253,29 @@ class Input {
   static clearFundRetireIncreaseGiven() {
     document.getElementById("inquiry-fundRetireIncrease-given").value = '';
   }
+
+  static cloneObjOrArr(obj) {
+    let clone;
+    if (Array.isArray(obj)) {
+      clone = [];  
+      for (let i of obj) {
+        if (typeof i == 'object') {
+         clone.push( this.cloneObjOrArr(i) );
+        }
+        else clone.push(i);
+      }
+    }  
+    else {
+      clone = {};  
+      for (let key in obj) { 
+        if (typeof obj[key] == 'object') {
+          clone[key] = ( this.cloneObjOrArr(obj[key]) );
+        }
+        else clone[key] = obj[key];      
+      }
+    }  
+    return clone;
+  }
   
 };
 
@@ -444,7 +467,7 @@ class Client {
     this.retiredPensionTaken = input.retiredPensionTaken;
     this.retiredCharge = assets.retiredChargeObj(input.retiredCharge, input.retiredChargePaid, this.retiredAge, this.age);
     this._initialFund = input.initialFund;
-    this.assets = input.assets;
+    this.assets = Input.cloneObjOrArr(input.assets); //Клонируем объект!!!
     this.workFundIncrease = input.workFundIncrease;
     this.retireFundIncrease = input.retireFundIncrease;
     this.fundIncreaseRate = input.fundIncreaseRate;
@@ -713,17 +736,33 @@ class Data {
     this.maxLength = arrOfObjs.length;
   }
 
-  getEndFunds(client) {
+  getEndFunds() {
     let answer = [];
 
-    answer.push([0, client.initialFund, null, null]);
-
+    //answer.push([0, client.initialFund, null, null]);
+    answer.push([0, this.source[0].fundStart, null, null]); // Возможно так правильнее
+    
     for (let i = 1; i <= this.maxLength; i++) {
       let fundAmount = this.source[i-1].fundEnd;
       if (fundAmount < 0) break;
       let monthFund = [i, fundAmount, null, null];
       answer.push(monthFund);
     }
+    return answer;
+  }
+
+  getFundAndCapital() {
+    let answer = [];
+    answer.push([0, this.source[0].fundStart, this.source[0].capitalStart, null]);
+
+    for (let i = 1; i <= this.maxLength; i++) {
+      let currentFundEnd = this.source[i-1].fundEnd;
+      let currentCapitalEnd = this.source[i-1].capitalEnd;
+      if (currentFundEnd < 0) break;
+      let currentFundAndCapital = [i, currentFundEnd, currentCapitalEnd, null];
+      answer.push(currentFundAndCapital);
+    }
+
     return answer;
   }
 }

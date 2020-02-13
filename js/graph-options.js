@@ -15,7 +15,7 @@ let graph_options = {
   }, 
 
   hAxis: {
-    //title: 'Years',
+    title: 'Месяцы',
     gridlines: {
       interval: 1,
       minSpacing: 40,

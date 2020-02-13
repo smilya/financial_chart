@@ -1,5 +1,9 @@
 'use strict'
 
+// Для отладки выводим в область видимости:
+let monthsToSee;
+let dataToSee;
+
 // Загружаем плагин google.charts
 // Плагин отрисовывает поле для графика
 // Настройки графика graph_options вынесены в файл graph-options.js
@@ -104,7 +108,7 @@ document.getElementById('start').onclick = function() {
     graphics.drawEmptyField();
     return;
   } 
-
+  
   // 3. Создаем объект клиента:
   let client = new Client(input);
 
@@ -114,15 +118,22 @@ document.getElementById('start').onclick = function() {
 
   let months = client.getData(period);
 
+  monthsToSee = months; // Временно для отладки
+
   // 5. Создаем объект с методами, извлекающими из нашего массива объектов months полезную инофрмацию для графика
   let data = new Data(months);
 
   // 6. Формируем массив данных для передачи графику. 
-  
-  let funds = data.getEndFunds(client);
+
+  //let funds = data.getEndFunds();
+  let fundsAndCapital = data.getFundAndCapital();
+
+  dataToSee = fundsAndCapital; // Временно для отладки
+
 
   // 7. Полученный массив funds передаем графику и строим этот график.active
-    graphics.chartData = funds;
+    // graphics.chartData = funds;
+    graphics.chartData = fundsAndCapital;
     graphics.drawBasic(); 
   // debugger
 }
