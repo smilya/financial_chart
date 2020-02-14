@@ -213,6 +213,11 @@ class Input {
       if(assetObj.valueChangeRate == 'halfYear') {valueChangeRateStr = 'раз в полгода'};
       if(assetObj.valueChangeRate == 'year') {valueChangeRateStr = 'раз в год'};
 
+      let startingDateStr = assetObj.startingDateArr[0] + '.' + assetObj.startingDateArr[1];
+      let startingAtStr = "в начале месяца";
+      if (assetObj.startingAt == 'end') startingAtStr = "в конце месяца";
+
+      
       let closureDateStr = 'НЕТ';
       if (assetObj.closureDateArr != null) {
         closureDateStr = assetObj.closureDateArr[0] + '.' + assetObj.closureDateArr[1];
@@ -230,7 +235,7 @@ class Input {
       if (assetObj.incomeChangeRate == 'year') {incomeChangeRateStr = 'год'};
       if (assetObj.incomeChangeRate == '2_years') {incomeChangeRateStr = '2 года'};
       
-      let str = `Актив: <b>${assetObj.title}</b>, Сумма/Стоимость: <b>${assetObj.value}</b> <b>${assetObj.currencyType}</b>, Ставка: <b>${assetObj.valueChange}%</b>, Капитализация: <b>${valueChangeRateStr}</b>, <b>${valueToStr}</b>,<br>Дата закрытия: <b>${closureDateStr}${includingLastMonthStr}</b>, Доход/мес: <b>${assetObj.income}</b> <b>${assetObj.currencyType}</b>, Динамика дохода: <b>${assetObj.incomeChange}</b>% / <b>${incomeChangeRateStr}</b>`;
+      let str = `Актив: <b>${assetObj.title}</b>, Сумма/Стоимость: <b>${assetObj.value}</b> <b>${assetObj.currencyType}</b>, Ставка: <b>${assetObj.valueChange}%</b>, Капитализация: <b>${valueChangeRateStr}</b>, <b>${valueToStr}</b>,<br>Дата открытия: <b>${startingDateStr} ${startingAtStr}</b>, Дата закрытия: <b>${closureDateStr}${includingLastMonthStr}</b>, Доход/мес: <b>${assetObj.income}</b> <b>${assetObj.currencyType}</b>, Динамика дохода: <b>${assetObj.incomeChange}</b>% / <b>${incomeChangeRateStr}</b>`;
       let paragraph = document.createElement('p');
       paragraph.innerHTML = str;
       document.querySelector('#assets-addAsset').after(paragraph);
